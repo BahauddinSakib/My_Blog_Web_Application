@@ -5,6 +5,7 @@ using WebApplication1.Models.DTO;
 using WebApplication1.Models;
 using WebApplication1.Models.Domain;
 using WebApplication1.Repositories;
+using Microsoft.Identity.Client;
 
 namespace WebApplication1.Controllers
 {
@@ -29,7 +30,6 @@ namespace WebApplication1.Controllers
             };
 
             await categoryRepository.CreateAsync(category);
-         
 
             var response = new CategoryDto
             {
@@ -37,6 +37,27 @@ namespace WebApplication1.Controllers
                 Name = category.Name,
                 UrlHandle = category.UrlHandle
             };
+
+            return Ok(response);
+        }
+
+        // GET https://localhost:7279/api/Categories
+        [HttpGet]
+        public async Task<IActionResult> GetAllCategories()
+        {
+            var categories = await categoryRepository.GetAllAsync();
+
+            // Map Domain Model to DTO
+            var response = new List<CategoryDto>();
+            foreach (var category in categories)
+            {
+                response.Add(new CategoryDto
+                {
+                    Id = category.Id,
+                    Name = category.Name,
+                    UrlHandle = category.UrlHandle
+                });
+            }
 
             return Ok(response);
         }
