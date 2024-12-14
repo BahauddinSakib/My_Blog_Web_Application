@@ -3,6 +3,7 @@ using WebApplication1.Data;
 
 using WebApplication1.Repositories;
 using WebApplication1.Repositories.Implementation;
+using WebApplication1.Repositories.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 
 var app = builder.Build();
 
