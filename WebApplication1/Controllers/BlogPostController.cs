@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models.Domain;
 using WebApplication1.Models.DTO;
+using WebApplication1.Repositories;
 using WebApplication1.Repositories.Interface;
 
 namespace WebApplication1.Controllers
@@ -11,9 +12,12 @@ namespace WebApplication1.Controllers
     public class BlogPostController : ControllerBase
     {
         private readonly IBlogPostRepository blogPostRepository;
+        private readonly ICategoryRepository categoryRepository;
 
-        public BlogPostController(IBlogPostRepository blogPostRepository) {
+        public BlogPostController(IBlogPostRepository blogPostRepository,
+            ICategoryRepository categoryRepository) {
             this.blogPostRepository = blogPostRepository;
+            this.categoryRepository = categoryRepository;
         }
 
         //{apibaseurl}/api/blogposts
@@ -33,9 +37,20 @@ namespace WebApplication1.Controllers
                 PublishedDate = request.PublishedDate,
                 ShortDescription = request.ShortDescription,
                 Title = request.Title,
-                Urlhandle = request.Urlhandle
+                Urlhandle = request.Urlhandle,
+                Categories = new List<Category>()
 
             };
+
+            foreach (var categoryGuid in request.Categories)
+            {
+                var existingCategory = await categoryRepository.GetById(categoryGuid);
+                if(existingCategory is not null)
+                {
+                    blogPost.Categories.Add(existingCategory);
+                }
+            }
+
 
                  blogPost = await blogPostRepository.CreateAsync(blogPost);
 
@@ -49,7 +64,13 @@ namespace WebApplication1.Controllers
                 PublishedDate = blogPost.PublishedDate,
                 ShortDescription = blogPost.ShortDescription,
                 Title = blogPost.Title,
-                Urlhandle = blogPost.Urlhandle
+                Urlhandle = blogPost.Urlhandle,
+                Categories = blogPost.Categories.Select(x=> new CategoryDto
+                {
+                    Id=x.Id,
+                    Name=x.Name,
+                    UrlHandle=x.UrlHandle
+                }).ToList()
             };
 
             return Ok(response);
@@ -75,7 +96,13 @@ namespace WebApplication1.Controllers
                     PublishedDate = blogPost.PublishedDate,
                     ShortDescription = blogPost.ShortDescription,
                     Title = blogPost.Title,
-                    Urlhandle = blogPost.Urlhandle
+                    Urlhandle = blogPost.Urlhandle,
+                    Categories = blogPost.Categories.Select(x => new CategoryDto
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        UrlHandle = x.UrlHandle
+                    }).ToList()
 
                 });
             }
