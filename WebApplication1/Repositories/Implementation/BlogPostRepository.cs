@@ -24,5 +24,10 @@ namespace WebApplication1.Repositories.Implementation
         {
             return await dbContext.BlogPosts.Include(x=>x.Categories).ToListAsync();//will get all blogpost along categories
         }
+
+        public async Task<BlogPost?> GetByIdAsync(Guid id)
+        {
+            return await dbContext.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(x=> x.Id==id);
+        }
     }
 }

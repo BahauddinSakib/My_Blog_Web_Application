@@ -108,6 +108,40 @@ namespace WebApplication1.Controllers
             }
             return Ok(response);
         }
+        //Get: {apiBaseUrl}/api/BlogPost
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetBlogPostById([FromRoute] Guid id)
+        {
+            //get the blogpost from repo
+            var blogPost = await blogPostRepository.GetByIdAsync(id);
+
+            if(blogPost is null)
+            {
+                return NotFound();  
+            }
+            //convert domain to Dto
+            var response = new BlogPostDto
+            {
+                Id = blogPost.Id,
+                Author = blogPost.Author,
+                Content = blogPost.Content,
+                FeaturedImageUrl = blogPost.FeaturedImageUrl,
+                IsVisible = blogPost.IsVisible,
+                PublishedDate = blogPost.PublishedDate,
+                ShortDescription = blogPost.ShortDescription,
+                Title = blogPost.Title,
+                Urlhandle = blogPost.Urlhandle,
+                Categories = blogPost.Categories.Select(x => new CategoryDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle
+                }).ToList()
+            };
+            return Ok(response);
+
+        }
 
 
 
