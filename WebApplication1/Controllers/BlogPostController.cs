@@ -200,6 +200,34 @@ namespace WebApplication1.Controllers
             };
             return Ok(response);
         }
+        //Delete: {apibaseurl}/api/BlogPost/{id}
+        [HttpDelete]
+        [Route("{id:Guid}")]
+
+        public async Task<IActionResult> DeleteBlogPost([FromRoute] Guid id)
+        {
+            var deletedBlogPost = await blogPostRepository.DeleteAsync(id);
+
+            if(deletedBlogPost == null)
+            {
+                return NotFound();
+            }
+            //Convert domain model to dto
+            var response = new BlogPostDto
+            {
+                Id = deletedBlogPost.Id,
+                Author = deletedBlogPost.Author,
+                Content = deletedBlogPost.Content,
+                FeaturedImageUrl = deletedBlogPost.FeaturedImageUrl,
+                IsVisible = deletedBlogPost.IsVisible,
+                PublishedDate = deletedBlogPost.PublishedDate,
+                ShortDescription = deletedBlogPost.ShortDescription,
+                Title = deletedBlogPost.Title,
+                Urlhandle = deletedBlogPost.Urlhandle
+            };
+
+                return Ok(response);
+        }
 
     }
 }
