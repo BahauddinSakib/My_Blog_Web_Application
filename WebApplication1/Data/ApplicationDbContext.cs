@@ -12,5 +12,6 @@ namespace WebApplication1.Data
         //property
         public DbSet<BlogPost> BlogPosts { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<BlogImage> BlogImages { get; set; }
     }
 }
