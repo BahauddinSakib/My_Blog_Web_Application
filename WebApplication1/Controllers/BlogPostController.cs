@@ -37,7 +37,7 @@ namespace WebApplication1.Controllers
                 PublishedDate = request.PublishedDate,
                 ShortDescription = request.ShortDescription,
                 Title = request.Title,
-                Urlhandle = request.Urlhandle,
+                UrlHandle = request.Urlhandle,
                 Categories = new List<Category>()
 
             };
@@ -64,7 +64,7 @@ namespace WebApplication1.Controllers
                 PublishedDate = blogPost.PublishedDate,
                 ShortDescription = blogPost.ShortDescription,
                 Title = blogPost.Title,
-                Urlhandle = blogPost.Urlhandle,
+                Urlhandle = blogPost.UrlHandle,
                 Categories = blogPost.Categories.Select(x=> new CategoryDto
                 {
                     Id=x.Id,
@@ -96,7 +96,7 @@ namespace WebApplication1.Controllers
                     PublishedDate = blogPost.PublishedDate,
                     ShortDescription = blogPost.ShortDescription,
                     Title = blogPost.Title,
-                    Urlhandle = blogPost.Urlhandle,
+                    Urlhandle = blogPost.UrlHandle,
                     Categories = blogPost.Categories.Select(x => new CategoryDto
                     {
                         Id = x.Id,
@@ -131,7 +131,7 @@ namespace WebApplication1.Controllers
                 PublishedDate = blogPost.PublishedDate,
                 ShortDescription = blogPost.ShortDescription,
                 Title = blogPost.Title,
-                Urlhandle = blogPost.Urlhandle,
+                Urlhandle = blogPost.UrlHandle,
                 Categories = blogPost.Categories.Select(x => new CategoryDto
                 {
                     Id = x.Id,
@@ -141,6 +141,43 @@ namespace WebApplication1.Controllers
             };
             return Ok(response);
 
+        }
+
+        //Get: {apiBaseUrl}/api/BlogPost/{urlHandle}
+
+        [HttpGet]
+        [Route("{urlHandle}")]
+
+        public async Task<IActionResult> GetBlogPostByUrlHandle([FromRoute] string urlHandle)
+        {
+           //Get BlogPosts details from repository
+           var blogPost = await blogPostRepository.GetByUrlHandleAsync(urlHandle);
+
+
+            if (blogPost is null)
+            {
+                return NotFound();
+            }
+            //convert domain to Dto
+            var response = new BlogPostDto
+            {
+                Id = blogPost.Id,
+                Author = blogPost.Author,
+                Content = blogPost.Content,
+                FeaturedImageUrl = blogPost.FeaturedImageUrl,
+                IsVisible = blogPost.IsVisible,
+                PublishedDate = blogPost.PublishedDate,
+                ShortDescription = blogPost.ShortDescription,
+                Title = blogPost.Title,
+                Urlhandle = blogPost.UrlHandle,
+                Categories = blogPost.Categories.Select(x => new CategoryDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle
+                }).ToList()
+            };
+            return Ok(response);
         }
 
         //PUT: {apibaseurl}/api/BlogPost
@@ -160,7 +197,7 @@ namespace WebApplication1.Controllers
                 PublishedDate = request.PublishedDate,
                 ShortDescription = request.ShortDescription,
                 Title = request.Title,
-                Urlhandle = request.Urlhandle,
+                UrlHandle = request.Urlhandle,
                 Categories = new List<Category>()
             };
             //Foreach
@@ -190,7 +227,7 @@ namespace WebApplication1.Controllers
                 PublishedDate = blogPost.PublishedDate,
                 ShortDescription = blogPost.ShortDescription,
                 Title = blogPost.Title,
-                Urlhandle = blogPost.Urlhandle,
+                Urlhandle = blogPost.UrlHandle,
                 Categories = blogPost.Categories.Select(x => new CategoryDto
                 {
                     Id = x.Id,
@@ -223,7 +260,7 @@ namespace WebApplication1.Controllers
                 PublishedDate = deletedBlogPost.PublishedDate,
                 ShortDescription = deletedBlogPost.ShortDescription,
                 Title = deletedBlogPost.Title,
-                Urlhandle = deletedBlogPost.Urlhandle
+                Urlhandle = deletedBlogPost.UrlHandle
             };
 
                 return Ok(response);
