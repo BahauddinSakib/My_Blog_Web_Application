@@ -2,6 +2,7 @@
 using WebApplication1.Models.DTO;
 using WebApplication1.Models.Domain;
 using WebApplication1.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers
 {
@@ -43,6 +44,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllCategories()
         {
             var categories = await categoryRepository.GetAllAsync();
