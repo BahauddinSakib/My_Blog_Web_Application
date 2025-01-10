@@ -1,0 +1,11 @@
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace WebApplication1.Repositories.Interface
+{
+    public interface ITokenRepository
+    {
+        string CreateJwtToken(IdentityUser user, List<string> roles);
+
+
+    }
+}
