@@ -1,0 +1,1 @@
+This project is a modern web application built with ASP.NET Core for a robust back-end and Angular for a dynamic, interactive front-end. Bootstrap ensures responsive. Combining scalability, security, and seamless API integration, it delivers a user-centric, full-stack solution with a focus on performance, maintainability, and visual appeal.
