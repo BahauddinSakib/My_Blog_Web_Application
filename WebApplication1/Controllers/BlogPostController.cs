@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models.Domain;
 using WebApplication1.Models.DTO;
@@ -22,6 +23,7 @@ namespace WebApplication1.Controllers
 
         //{apibaseurl}/api/blogposts
         [HttpPost]
+        [Authorize(Roles ="Writer")]
         public async Task<IActionResult> CreateBlogPost([FromBody] CreateBlogPostRequestDto request)
 
         { 
@@ -52,7 +54,7 @@ namespace WebApplication1.Controllers
             }
 
 
-                 blogPost = await blogPostRepository.CreateAsync(blogPost);
+             blogPost = await blogPostRepository.CreateAsync(blogPost);
 
             var response = new BlogPostDto
             {
@@ -183,6 +185,7 @@ namespace WebApplication1.Controllers
         //PUT: {apibaseurl}/api/BlogPost
         [HttpPut]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
 
         public async Task<IActionResult> UpdateBlogPostById([FromRoute] Guid id, UpdateBlogPostRequestDto request)
         {
@@ -240,6 +243,7 @@ namespace WebApplication1.Controllers
         //Delete: {apibaseurl}/api/BlogPost/{id}
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
 
         public async Task<IActionResult> DeleteBlogPost([FromRoute] Guid id)
         {

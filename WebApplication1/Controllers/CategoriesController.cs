@@ -18,6 +18,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
+        //[Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateCategory(CreateCategoryRequestDto request)
         {
             if (!ModelState.IsValid)
@@ -43,11 +44,12 @@ namespace WebApplication1.Controllers
             return Ok(response);
         }
 
+        //GET: https://localhost:7279/api/Categories?query=html
         [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetAllCategories()
+       
+        public async Task<IActionResult> GetAllCategories([FromQuery] string? query)
         {
-            var categories = await categoryRepository.GetAllAsync();
+            var categories = await categoryRepository.GetAllAsync(query);
 
             var response = new List<CategoryDto>();
             foreach (var category in categories)
@@ -85,6 +87,7 @@ namespace WebApplication1.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> EditCategory([FromRoute] Guid id, UpdateCategoryRequestDto request)
         {
             if (!ModelState.IsValid)
@@ -121,6 +124,7 @@ namespace WebApplication1.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
 
         public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
         {

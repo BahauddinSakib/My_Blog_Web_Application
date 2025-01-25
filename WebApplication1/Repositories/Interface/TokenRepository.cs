@@ -31,15 +31,15 @@ namespace WebApplication1.Repositories.Interface
 
             //JWT security Token Perameters
 
-            var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
 
-            var credentials = new SigningCredentials(Key, SecurityAlgorithms.HmacSha256);
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: configuration["Jwt:Issuer"],
                 audience: configuration["Jwt: Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(15), //will expire after 15 minutes
+                expires: DateTime.Now.AddMinutes(30), //will expire after 15 minutes
                 signingCredentials: credentials);
 
             //Return tokens
